@@ -15,7 +15,38 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return response()->json(['code' => 200, 'tokens' => Notification::all(), 'status' => 'success'], 200);
+        $alerts = Notification::all();
+        if(!$alerts->count()) {
+            return response()->json(['code' => 400, 'message' => 'No tokens found.', 'status' => 'error'], 400);
+        }
+        /*
+        curl -H "Content-Type: application/json" -X POST "https://exp.host/--/api/v2/push/send" -d '{
+          "to": "ExponentPushToken[EZOVI7JGpy0ILZl-eQiXnM]",
+          "title":"hello",
+          "body": "world"
+        }'
+        */
+        $ch = curl_init();
+
+        $data = array(
+            'to'    => 'ExponentPushToken[EZOVI7JGpy0ILZl-eQiXnM]',
+            'title' => 'Foo',
+            'body'  => 'bar'
+        );
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_URL,"https://exp.host/--/api/v2/push/send");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Receive server response ...
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $server_output = curl_exec($ch);
+
+        curl_close($ch);
+
+        return response()->json(['code' => 200, 'tokens' => $alerts, 'status' => 'success'], 200);
     }
 
     /**
