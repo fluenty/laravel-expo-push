@@ -26,7 +26,7 @@ class NotificationController extends Controller
           "body": "world"
         }'
         */
-        $ch = curl_init();
+        $ch = \curl_init();
 
         $data = array(
             'to'    => 'ExponentPushToken[EZOVI7JGpy0ILZl-eQiXnM]',
@@ -34,17 +34,17 @@ class NotificationController extends Controller
             'body'  => 'bar'
         );
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_setopt($ch, CURLOPT_URL,"https://exp.host/--/api/v2/push/send");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        \curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        \curl_setopt($ch, CURLOPT_URL,"https://exp.host/--/api/v2/push/send");
+        \curl_setopt($ch, CURLOPT_POST, 1);
+        \curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
         // Receive server response ...
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $server_output = curl_exec($ch);
 
-        curl_close($ch);
+        \curl_close($ch);
 
         return response()->json(['code' => 200, 'tokens' => $alerts, 'status' => 'success'], 200);
     }
