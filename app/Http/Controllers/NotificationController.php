@@ -25,11 +25,7 @@ class NotificationController extends Controller
      */
     public function create()
     {
-        Notification::create([
-            'expo_token' => 'abc123'
-        ]);
-
-        return response()->json(['code' => 200, 'message' => 'Token successfully stored!', 'status' => 'success'], 200);
+        //
     }
 
     /**
